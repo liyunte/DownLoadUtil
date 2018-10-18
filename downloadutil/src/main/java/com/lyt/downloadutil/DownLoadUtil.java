@@ -54,6 +54,7 @@ public class DownLoadUtil {
     private long downloadId;
     private String apkName = "play.apk";
     private WeakReference<Activity> weakReference;
+    public static final int REQUEST_CODE = 100;
 
     public DownLoadUtil(Activity context) {
         weakReference = new WeakReference<>(context);
@@ -148,7 +149,7 @@ public class DownLoadUtil {
                     if (mContext == null) {
                         return;
                     }
-                    mContext.registerReceiver(mReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                    mContext.unregisterReceiver(mReceiver);
                     break;
                 //下载失败
                 case DownloadManager.STATUS_FAILED:
@@ -156,7 +157,7 @@ public class DownLoadUtil {
                     if (mContexts == null) {
                         return;
                     }
-                    mContexts.registerReceiver(mReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                    mContexts.unregisterReceiver(mReceiver);
                     break;
             }
         }
@@ -215,6 +216,6 @@ public class DownLoadUtil {
         Uri packageURI = Uri.parse("package:" + mContext.getPackageName());
         //注意这个是8.0新API
         Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, packageURI);
-        mContext.startActivityForResult(intent, 100);
+        mContext.startActivityForResult(intent, REQUEST_CODE);
     }
 }
